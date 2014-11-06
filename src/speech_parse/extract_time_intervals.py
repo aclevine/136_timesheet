@@ -29,7 +29,7 @@ class TimeInterval():
     def load_start(self, start_hour, start_minute = 0, calc_duration = False):
         self.start = self.start.replace(hour = start_hour, minute = start_minute)
 
-    def load_duration(self, duration_hours = 0, duration_mins = 0):
+    def load_duration(self, duration_hours, duration_mins):
         self.duration = datetime.timedelta(hours = duration_hours, 
                                            minutes = duration_mins)
    
@@ -44,7 +44,7 @@ class GetTimeWorked():
     def __init__(self, transcription = ''):
         self.curr_interval = TimeInterval()
         # for testing
-        self.transcription = transcription
+        self.transcription = transcription.lower()
         
     def get_audio_device_name(self):
         a = pa.PyAudio()
@@ -56,20 +56,28 @@ class GetTimeWorked():
             audio = r.record(source)                       
         try:
             self.transcription = r.recognize(audio)
+            return transcription
         except LookupError:
             print "Could not understand audio"
 
-    def find_time(self, flag):
+    def find_start_end(self, flag_list):
         hour_p = "\d{1,2}"
         minute_p = ":(\d\d)"
-        hour = re.findall("%s (%s)" %(flag, hour_p), self.transcription)
-        minute = re.findall("%s %s%s" %(flag, hour_p, minute_p), self.transcription)
+        for flag in flag_list:
+            hour = re.findall("%s (%s)" %(flag, hour_p), self.transcription)
+            minute = re.findall("%s %s%s" %(flag, hour_p, minute_p), self.transcription)
         return hour, minute
         
+    def find_duration(self):
+        d_hours = re.findall("(\d+) hours", self.transcription)
+        d_minutes = re.findall("(\d+) minutes", self.transcription)
+        return d_hours, d_minutes
+
     def parse_transcription(self):
         # parse transcription to get start and end times
-        start_hour, start_minute = self.find_time("from")
-        end_hour, end_minute = self.find_time("to")
+        start_hour, start_minute = self.find_start_end(["from"])
+        end_hour, end_minute = self.find_start_end(["to", "till"])
+        d_hours, d_minutes = self.find_duration()
 
         # logic to load start and end times        
         if start_hour:
@@ -89,20 +97,34 @@ class GetTimeWorked():
                 self.curr_interval.load_end(end_hour, end_minute)
             else:
                 self.curr_interval.load_end(end_hour)
-
+        if d_hours and d_minutes:
+            self.curr_interval.load_duration(int(d_hours[0]), int(d_minutes[0]))
+        elif d_hours:
+            self.curr_interval.load_duration(int(d_hours[0]), 0)             
+        elif d_minutes:
+            self.curr_interval.load_duration(0, int(d_minutes[0]))
+            
+        # calculate missing elements
+        if not (start_hour and d_hours and d_minutes):
+            print "Error: need start time or duration worked"
+        elif not (d_hours and d_minutes):
+                self.curr_interval.calculate_duration()
+        elif not start_hour:
+            self.curr_interval.calculate_start()
                 
 if __name__ == "__main__":
     
     # DEMO
-    transcription = "work from 12:05 to 6:37"
+#     transcription = "work from 12:05 to 6:37"
+#     transcription = "Brewers for 2 hours and 45 minutes"
+    transcription = "work from"
 
     t = GetTimeWorked(transcription)
     t.parse_transcription()
+#     print t.curr_interval.duration
     print t.curr_interval.start
     print t.curr_interval.end
-    
-#     transcription = speech_to_text( sr.WavFile("test_3.wav") )
-#     print transcription
-#     transcription = "work from 12:30 to 5 p.m."
 
+#     t.speech_to_text( sr.WavFile("test/test_5.wav") )
+#     print t.transcription
 
