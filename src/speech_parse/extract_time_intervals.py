@@ -1,37 +1,33 @@
 '''
 Created on Nov 6, 2014
 
-docs:
+@author: Aaron Levine
+@email: aclevine@brandeis.edu
+
+speech_recognition docs:
 https://pypi.python.org/pypi/SpeechRecognition/
 https://github.com/Uberi/speech_recognition
 
-iso space standard for time encoding:
+ISO for time encoding:
 http://en.wikipedia.org/wiki/ISO_8601
 '''
-
-
 import pyaudio as pa
 import speech_recognition as sr
 import datetime
 import re
-import bisect
-from scipy.constants.constants import hour
 
 class TimeInterval():
     def __init__(self):
         self.now = datetime.datetime.now()
         self.start = datetime.datetime(self.now.year, self.now.month, self.now.day)
-        self.end = self.now
+        self.end = self.now.replace(microsecond=0)
         self.duration = datetime.timedelta()
 
     def load_end(self, end_hour, end_minute = 0):        
-        self.end = datetime.datetime(self.now.year, self.now.month, self.now.day,
-                                     hour = end_hour, minute = end_minute)
+        self.end = self.end.replace(hour = end_hour, minute = end_minute)
 
     def load_start(self, start_hour, start_minute = 0, calc_duration = False):
-        self.start = datetime.datetime(self.now.year, self.now.month, self.now.day,
-                                     hour = start_hour, minute = start_minute)
-
+        self.start = self.start.replace(hour = start_hour, minute = start_minute)
 
     def load_duration(self, duration_hours = 0, duration_mins = 0):
         self.duration = datetime.timedelta(hours = duration_hours, 
@@ -47,7 +43,6 @@ class TimeInterval():
 class GetTimeWorked():
     def __init__(self, transcription = ''):
         self.curr_interval = TimeInterval()
-        
         # for testing
         self.transcription = transcription
         
