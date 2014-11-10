@@ -20,7 +20,7 @@ class TimeInterval():
     def __init__(self):
         self.now = datetime.datetime.now()
         self.start = datetime.datetime(self.now.year, self.now.month, self.now.day)
-        self.end = self.now.replace(microsecond=0)
+        self.end = self.now.replace(microsecond=0, second=0)
         self.duration = datetime.timedelta()
 
     def load_end(self, end_hour, end_minute = 0):        
@@ -39,6 +39,18 @@ class TimeInterval():
     def calculate_start(self):
         self.start = self.end - self.duration
 
+    def datetime_to_iso(self, datetime_obj):
+        return "%d-%d-%dT%d:%d:%dZ" %(datetime_obj.year, 
+                                      datetime_obj.month, 
+                                      datetime_obj.day,
+                                      datetime_obj.hour,
+                                      datetime_obj.minute,
+                                      datetime_obj.second)
+    
+    def interval_to_iso(self):
+        start_string = self.datetime_to_iso(self.start)
+        end_string = self.datetime_to_iso(self.end)
+        return "%s/%s" %(start_string, end_string)
         
 class GetTimeWorked():
     def __init__(self, transcription = ''):
@@ -69,13 +81,13 @@ class GetTimeWorked():
         return hour, minute
         
     def find_duration(self):
-        d_hours = re.findall("(\d+) hours", self.transcription)
-        d_minutes = re.findall("(\d+) minutes", self.transcription)
+        d_hours = re.findall("(\d+) hour", self.transcription)
+        d_minutes = re.findall("(\d+) minute", self.transcription)
         return d_hours, d_minutes
 
     def parse_transcription(self):
         # parse transcription to get start and end times
-        start_hour, start_minute = self.find_start_end(["from"])
+        start_hour, start_minute = self.find_start_end(["from", "since"])
         end_hour, end_minute = self.find_start_end(["to", "till"])
         d_hours, d_minutes = self.find_duration()
 
@@ -105,9 +117,10 @@ class GetTimeWorked():
             self.curr_interval.load_duration(0, int(d_minutes[0]))
             
         # calculate missing elements
-        if not (start_hour and d_hours and d_minutes):
+        if not start_hour and not d_hours and not d_minutes:
+            # if we need more information
             print "Error: need start time or duration worked"
-        elif not (d_hours and d_minutes):
+        elif not d_hours and not d_minutes:
                 self.curr_interval.calculate_duration()
         elif not start_hour:
             self.curr_interval.calculate_start()
@@ -115,15 +128,14 @@ class GetTimeWorked():
 if __name__ == "__main__":
     
     # DEMO
-#     transcription = "work from 12:05 to 6:37"
-#     transcription = "Brewers for 2 hours and 45 minutes"
-    transcription = "work from"
+    transcription = "I've been working since 6 a.m."
 
     t = GetTimeWorked(transcription)
     t.parse_transcription()
 #     print t.curr_interval.duration
-    print t.curr_interval.start
-    print t.curr_interval.end
+#     print t.curr_interval.start
+#     print t.curr_interval.end
+    print t.curr_interval.interval_to_iso()
 
 #     t.speech_to_text( sr.WavFile("test/test_5.wav") )
 #     print t.transcription
