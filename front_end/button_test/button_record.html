@@ -21,15 +21,11 @@
  
     // Get a handle on the first button element in the document.
     var button = document.getElementById("b1");
-
-	var rec = new Recorder(source)
  	var recording = 0;
-	var audioRecorder = new Recorder( inputPoint );
  
     // If a user clicks on it, say hello!
     button.addEventListener( "click", function( ev ) {
 		if( recording == 0 ){
-		
 	        button.style.color = "red"
 	        recording = 1;
 	    }

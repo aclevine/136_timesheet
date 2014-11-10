@@ -1,0 +1,12 @@
+Launch simple HTTP server:
+
+	python -m SimpleHTTPServer
+	
+	
+Address:
+	
+	127.0.0.1:8000
+	
+Files held in:
+	
+	usr/
