@@ -75,9 +75,11 @@ DEALINGS IN THE SOFTWARE.
     this.getBuffers = function(cb) {
       currCallback = cb || config.callback;
       worker.postMessage({ command: 'getBuffers' })
-    }
+	  console.log("buffering")
+	}
 
     this.exportWAV = function(cb, type){
+	  console.log("exporting")
       currCallback = cb || config.callback;
       type = type || config.type || 'audio/wav';
       if (!currCallback) throw new Error('Callback not set');
