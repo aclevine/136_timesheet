@@ -18,6 +18,11 @@ Install instructions
     ```
         . venv/bin/activate
     ```
+
+	windows:
+	'''
+		venv\Scripts\activate
+	'''
     
 5.  install dependencies
     
@@ -25,6 +30,11 @@ Install instructions
         pip install -r requirements.txt
     ```
 
+	windows:
+	'''
+		python -m pip install -r requirements.txt
+	'''
+	
 6. create `.env` file
 7. paste
 
