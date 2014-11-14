@@ -46,7 +46,7 @@ class httpServHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         execfile(self.path, self.args)
 
 #Set the root directory
-home = os.envrion['HOME']
+home = os.environ['HOME']
 if 'Sites' in os.listdir(home):
     os.chdir(os.path.join(home, 'Sites'))
 else:
