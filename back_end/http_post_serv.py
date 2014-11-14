@@ -1,8 +1,5 @@
 import os, sys
 import BaseHTTPServer, cgi
-import SimpleHTTPServer
-
-import XML
 
 servAddr = ('localhost',8000)
 
@@ -49,7 +46,7 @@ class httpServHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         execfile(self.path, self.args)
 
 #Set the root directory
-home = os.getcwd()
+home = os.environ['HOME']
 if 'Sites' in os.listdir(home):
     os.chdir(os.path.join(home, 'Sites'))
 else:
