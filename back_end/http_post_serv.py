@@ -11,8 +11,10 @@ class httpServHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         form = cgi.FieldStorage(
             fp=self.rfile,
             headers=self.headers,
-            environ={'REQUEST_METHOD':'POST',
-                     'CONTENT_TYPE':self.headers['Content-Type']}
+            environ={
+                'REQUEST_METHOD' : 'POST',
+                'CONTENT_TYPE' : self.headers['Content-Type']
+            }
         )
         
         # The uploaded file
