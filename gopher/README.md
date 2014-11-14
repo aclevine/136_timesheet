@@ -57,3 +57,8 @@ Install instructions
     ```
     foreman start
     ```
+	
+	alt:
+	'''
+	python run.py
+	'''

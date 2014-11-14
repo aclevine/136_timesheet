@@ -50,7 +50,8 @@ def get_logger():
 # Configure the database connection
 from sqlalchemy import create_engine
 from gopher import models
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+from config import DATABASE_URL
+engine = create_engine(DATABASE_URL)
 models.init_model(engine)
 
 # Configure REST interface

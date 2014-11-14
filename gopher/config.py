@@ -3,6 +3,7 @@ Configuration objects for the app.
 """
 
 # DATABASE_URL=postgresql://Colin:bombadil@localhost/gopher
+DATABASE_URL = 'sqlite:///gopher.db'
 
 import os
 
