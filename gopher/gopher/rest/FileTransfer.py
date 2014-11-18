@@ -18,7 +18,6 @@ class FileTransfer(restful.Resource):
         # print request.form
         # print request.json
         data = request.data
-        # data = base64.b64decode(request.form.get("data")[22:])
         with open("wav_file.wav", 'wb') as audio:
         	audio.write(data)
         return jsonify({"message": "received"})

@@ -1,3 +1,6 @@
 http://www.lempere.com/2013/04/upload-audio-to-server-with-html5-and-getusermedia/
 http://stackoverflow.com/questions/15795678/upload-audio-recorded-in-browser-using-html5
 http://stackoverflow.com/questions/16810450/html5-getusermedia-record-audio-save-to-web-server-after-certain-time
+
+http://runnable.com/UiPcaBXaxGNYAAAL/how-to-upload-a-file-to-the-server-in-flask-for-python
+
