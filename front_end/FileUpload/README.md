@@ -1,23 +1,20 @@
-# Reversr
+# BUILT FROM
+	# Reversr
 
-Hosted by Heroku: [reversr.herokuapp.com](http://reversr.herokuapp.com)
+	Hosted by Heroku: [reversr.herokuapp.com](http://reversr.herokuapp.com)
 
-Just playing around with the [Web Audio API](https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html).
-
-## About
-It reverses audio. Nothing more.
-
-Oh, and there's an easter egg. See if you can find it.
+	Just playing around with the [Web Audio API](https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html).
 
 
+# ACTIVATION
 
-3. create virtual environment (make sure virtualenv is installed)
+1. create virtual environment (make sure virtualenv is installed)
     
     ```
         virtualenv venv
     ```
     
-4. activate the virtual environment
+2. activate the virtual environment
     
     ```
         . venv/bin/activate
@@ -28,7 +25,7 @@ Oh, and there's an easter egg. See if you can find it.
 		venv\Scripts\activate
 	'''
     
-5.  install dependencies
+3.  install dependencies
     
     ```
         pip install -r requirements.txt
@@ -39,9 +36,8 @@ Oh, and there's an easter egg. See if you can find it.
 		python -m pip install -r requirements.txt
 	'''
 
-7. start app  (install foreman if necessary)
+4. start app 
 	
-	alt:
 	'''
 	python app.py
 	'''

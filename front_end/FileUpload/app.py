@@ -3,6 +3,10 @@ import random
 import tempfile
 from flask import Flask, render_template, send_from_directory, request, jsonify, flash
 from werkzeug import secure_filename
+from extract_time_intervals import process_file
+import logging
+from logging.handlers import RotatingFileHandler
+
 
 # Configuration
 SECRET_KEY = 'hin6bab8ge25*r=x&amp;+5$0kn=-#log$pt^#@vrqjld!^2ci@g*b'
@@ -32,9 +36,12 @@ def home():
             temp_folder = os.path.split(temp_directory)[1]
             full_path = os.path.join(temp_directory, 
                                         filename)
-            print temp_directory
-            print full_path
             audio.save(full_path)
+            # run speech comprehension audio file
+            transcription, interval = process_file(full_path)
+            app.logger.info(transcription + '\n' + interval)
+            # delete audio file
+            # return guessed text
             return jsonify(filename=filename,
                             filepath=os.path.join('media','audio', temp_folder, filename),
                             )
