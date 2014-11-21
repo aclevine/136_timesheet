@@ -7,7 +7,7 @@ RECORDING
 
 (function() {
   var RECORDING_LIMIT, file_input, play, record, stop, timecode, upload;
-  var x = true;
+  var recording = true;
   RECORDING_LIMIT = 10 * 1000;
 
   timecode = function(ms) {
@@ -33,8 +33,8 @@ RECORDING
   record = function() {
     return Recorder.record({
       start: function() {
-        document.getElementById('record_button').disabled = true;
-        return document.getElementById("stop_button").disabled = false;
+        return document.getElementById('record_button').value = 'Stop';
+        //return document.getElementById("stop_button").disabled = false;
       },
       progress: function(milliseconds) {
         document.getElementById("time").innerHTML = timecode(milliseconds);
@@ -60,8 +60,8 @@ RECORDING
   };
 
   stop = function() {
-    document.getElementById('record_button').disabled = false;
-    document.getElementById("stop_button").disabled = true;
+    document.getElementById('record_button').value = 'Record';
+    //document.getElementById("stop_button").disabled = true;
     Recorder.stop();
     return upload();
   };
@@ -80,7 +80,13 @@ RECORDING
   };
 
   $('#record_button').click(function() {
-    return record();
+  	if (recording) {
+  	  recording = false;
+  	  return record();
+  	} else {
+  	  recording = true;
+  	  return stop();
+  	}
   });
 
   $('#play_button').click(function() {
@@ -114,16 +120,6 @@ RECORDING
 
   $('#stop_sound').click(function() {
     return stop_sound();
-  });
-
-  $('#toggle').click(function() {
-	if (x) {
-	  x = false;
-	  return record();
-	} else {
-	  x = true;
-	  return stop();
-	}
   });
   
 }).call(this);
