@@ -27,7 +27,6 @@
 {% block body %}
 
 {% block header %}{% endblock %}
-
 <div class="{% block content_class %}container{% endblock content_class %}">
 
   <div role="main">
@@ -47,7 +46,14 @@
 
         {% block content %}{% endblock %}
       </div>
-
+    <form name="user_input" action="localhost:5000" method="POST">
+    <div align="center">
+    <br><br>
+    <input type="text" size="25" value="user input">
+    <br><br>
+    </div>
+    </form>
+    
     </div><!-- end container -->
 
 
