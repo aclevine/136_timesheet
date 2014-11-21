@@ -39,7 +39,7 @@ Oh, and there's an easter egg. See if you can find it.
 		python -m pip install -r requirements.txt
 	'''
 
-6. start app  (install foreman if necessary)
+7. start app  (install foreman if necessary)
 	
 	alt:
 	'''

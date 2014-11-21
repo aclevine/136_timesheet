@@ -7,7 +7,7 @@ RECORDING
 
 (function() {
   var RECORDING_LIMIT, file_input, play, record, stop, timecode, upload;
-
+  var x = true;
   RECORDING_LIMIT = 10 * 1000;
 
   timecode = function(ms) {
@@ -116,4 +116,14 @@ RECORDING
     return stop_sound();
   });
 
+  $('#toggle').click(function() {
+	if (x) {
+	  x = false;
+	  return record();
+	} else {
+	  x = true;
+	  return stop();
+	}
+  });
+  
 }).call(this);
