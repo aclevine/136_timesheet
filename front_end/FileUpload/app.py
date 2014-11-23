@@ -40,7 +40,7 @@ def home():
             # run speech comprehension audio file
             transcription, interval = process_file(full_path)
             # delete audio file
-            for root, dirs, files in os.walk(os.path.split(temp_directory)[0], topdown=True):
+            for root, dirs, files in os.walk(os.path.split(temp_directory)[0], topdown=False):
                 for name in files:
                     os.remove(os.path.join(root, name))
                 for name in dirs:
