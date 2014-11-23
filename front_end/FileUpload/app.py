@@ -6,7 +6,7 @@ from werkzeug import secure_filename
 from extract_time_intervals import process_file
 import logging
 from logging.handlers import RotatingFileHandler
-
+import shutil
 
 # Configuration
 SECRET_KEY = 'hin6bab8ge25*r=x&amp;+5$0kn=-#log$pt^#@vrqjld!^2ci@g*b'
@@ -39,18 +39,18 @@ def home():
             audio.save(full_path)
             # run speech comprehension audio file
             transcription, interval = process_file(full_path)
-            app.logger.info(transcription + '\n' + interval)
             # delete audio file
+            for root, dirs, files in os.walk(os.path.split(temp_directory)[0], topdown=False):
+                for name in files:
+                    os.remove(os.path.join(root, name))
+                for name in dirs:
+                    os.rmdir(os.path.join(root, name))
             # return guessed text
+            app.logger.info(transcription + '\n' + interval)
             return jsonify(filename=filename,
                             filepath=os.path.join('media','audio', temp_folder, filename),
                             )
     return render_template('home.html')
-
-@app.route('/iknow')
-def iknow():
-    flash(u'Turn on your speakers.', 'info')
-    return render_template('iknow.html')
 
 @app.route('/media/audio/<temp_directory>/<filename>')
 def serve_temp_audio(temp_directory, filename):
