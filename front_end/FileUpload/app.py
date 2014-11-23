@@ -40,7 +40,7 @@ def home():
             # run speech comprehension audio file
             transcription, interval = process_file(full_path)
             # delete audio file
-            for root, dirs, files in os.walk(os.path.split(temp_directory)[0], topdown=False):
+            for root, dirs, files in os.walk(os.path.split(temp_directory)[0], topdown=True):
                 for name in files:
                     os.remove(os.path.join(root, name))
                 for name in dirs:
@@ -48,8 +48,8 @@ def home():
             # return guessed text
             app.logger.info(transcription + '\n' + interval)
             return jsonify(filename=filename,
-                            filepath=os.path.join('media','audio', temp_folder, filename),
-                            )
+                           filepath=os.path.join('media','audio', temp_folder, filename),
+                           )
     return render_template('home.html')
 
 @app.route('/media/audio/<temp_directory>/<filename>')
