@@ -15,7 +15,7 @@ dirname, filename = os.path.split(os.path.abspath(__file__))
 UPLOAD_FOLDER = '{0}/media/audio'.format(os.path.abspath(dirname))
 ALLOWED_EXTENSIONS = set( ['wav', 'mp3'])
 
-app = Flask(__name__)      
+app = Flask(__name__)
 app.config.from_object(__name__)
 
 

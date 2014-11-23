@@ -70,9 +70,13 @@ class GetTimeWorked():
     def find_start_end(self, flag_list):
         hour_p = "\d{1,2}"
         minute_p = ":(\d\d)"
+        hour = []
+        minute = []
         for flag in flag_list:
-            hour = re.findall("%s (%s)" %(flag, hour_p), self.transcription)
-            minute = re.findall("%s %s%s" %(flag, hour_p, minute_p), self.transcription)
+            if not hour:
+                hour = re.findall("%s (%s)" %(flag, hour_p), self.transcription)
+            if not minute:
+                minute = re.findall("%s %s%s" %(flag, hour_p, minute_p), self.transcription)
         return hour, minute
         
     def find_duration(self):
@@ -114,19 +118,23 @@ class GetTimeWorked():
         # calculate missing elements
         if not start_hour and not d_hours and not d_minutes:
             # if we need more information
-            print "Error: need start time or duration worked"
+            return "Error: need start time or duration worked"
         elif not d_hours and not d_minutes:
-                self.curr_interval.calculate_duration()
+            self.curr_interval.calculate_duration()
         elif not start_hour:
             self.curr_interval.calculate_start()
-
 
 def process_file(filepath):
     t = GetTimeWorked()
     audio =  sr.WavFile(filepath)
     t.speech_to_text(audio)
-    return t.transcription, t.curr_interval.interval_to_iso()
-                
+    error = t.parse_transcription()
+    if error:
+        return t.transcription, error
+    else:
+        return t.transcription, t.curr_interval.interval_to_iso()
+
+
 if __name__ == "__main__":
     
     # DEMO
@@ -139,5 +147,5 @@ if __name__ == "__main__":
 # #     print t.curr_interval.end
 #     print t.curr_interval.interval_to_iso()
 
-    print process_file("test_5.wav")
+    print process_file("./test_5.wav")
     
