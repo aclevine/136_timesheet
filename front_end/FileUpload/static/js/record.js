@@ -66,12 +66,17 @@ RECORDING
     return upload();
   };
 
+  fill_form = function(response) {
+	document.getElementByName('user_text').value = response.transciption;
+  }
+  
   upload = function() {
     return Recorder.upload({
       url: "/",
       audioParam: "audio_file",
       success: function(response) {
-        var track;
+        console.log(response);
+		var track;
         window.n_channels = 1;
         track = $.parseJSON(response);
         return load_sound_file(track.filepath);

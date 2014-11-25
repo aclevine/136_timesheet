@@ -47,8 +47,8 @@ def home():
                     os.rmdir(os.path.join(root, name))
             # return guessed text
             app.logger.info(transcription + '\n' + interval)
-            return jsonify(filename=filename,
-                           filepath=os.path.join('media','audio', temp_folder, filename),
+            return jsonify(transcription=transcription,
+						   interval = interval
                            )
     return render_template('home.html')
 
