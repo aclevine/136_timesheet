@@ -34,8 +34,7 @@ def home():
             filename = secure_filename(audio.filename)
             temp_directory = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
             temp_folder = os.path.split(temp_directory)[1]
-            full_path = os.path.join(temp_directory, 
-                                        filename)
+            full_path = os.path.join(temp_directory, filename)
             audio.save(full_path)
             # run speech comprehension audio file
             transcription, interval = process_file(full_path)
@@ -47,9 +46,7 @@ def home():
                     os.rmdir(os.path.join(root, name))
             # return guessed text
             app.logger.info(transcription + '\n' + interval)
-            return jsonify(transcription=transcription,
-						   interval = interval
-                           )
+            return jsonify(transcription=transcription, interval=interval)
     return render_template('home.html')
 
 @app.route('/media/audio/<temp_directory>/<filename>')
