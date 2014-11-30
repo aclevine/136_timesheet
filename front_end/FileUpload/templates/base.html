@@ -20,26 +20,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   {% block css %}{% endblock %}
   <script src="{{ url_for('static', filename='libs/jquery/jquery-1.9.0.min.js') }}"></script>
-  
-  <SCRIPT TYPE="text/javascript">
-  <!--
-  function submitenter(myfield,e)
-  {
-  var keycode;
-  if (window.event) keycode = window.event.keyCode;
-  else if (e) keycode = e.which;
-  else return true;
-
-  if (keycode == 13)
-     {
-     myfield.form.submit();
-     return false;
-     }
-  else
-     return true;
-  }
-  //-->
-  </SCRIPT>
 </head>
 <body class="{% block body_class %}{% endblock %}">
 </div><!-- /.container -->
@@ -65,12 +45,6 @@
 
         {% block content %}{% endblock %}
       </div>
-      <form name="user_input" action="localhost:5000" method="POST" onKeyPress="return submitenter(this,event)">
-          <div align="center">
-              <input name="user_text" type="text" size="25" value="I worked …" onKeyPress="return submitenter(this,event)">
-              <input type=submit value="Submit">
-          </div>
-      </form>
     </div><!-- end container -->
 
 
@@ -97,8 +71,6 @@
 </script>
     -->
     {% block scripts %}{% endblock scripts %}
-    <!-- end scripts -->
-
     {% endblock %}
   </body>
   </html>
