@@ -6,7 +6,7 @@ RECORDING
 
 
 (function() {
-  var RECORDING_LIMIT, file_input, play, record, stop, timecode, upload;
+  var RECORDING_LIMIT, file_input, play, record, stop, timecode, upload, submit;
   var recording = true;
   RECORDING_LIMIT = 10 * 1000;
 
@@ -66,24 +66,38 @@ RECORDING
     return upload();
   };
 
-  fill_form = function(response) {
-	document.getElementByName('user_text').value = response.transciption;
-  }
+  fill_form = function(text) {
+	document.getElementById('user_text').value = text;
+  };
   
   upload = function() {
-    return Recorder.upload({
+    document.getElementById('user_text').value = '...';
+    Recorder.upload({
       url: "/",
       audioParam: "audio_file",
       success: function(response) {
-        console.log(response);
-		var track;
+        var response_json;
+        response_json = $.parseJSON(response);
         window.n_channels = 1;
-        track = $.parseJSON(response);
-        return load_sound_file(track.filepath);
+        console.log(response_json.transcription);
+        console.log(response_json.interval);
+        document.getElementById('user_text').value = response_json.transcription;
+        document.getElementById('interval').value = response_json.interval;
+        return true;
+        //return load_sound_file(response_json.filepath);
       }
     });
+    return false;
   };
 
+  submit = function() {
+      var form;
+      form = document.getElementById("user_input");
+      console.log(form);
+      form.submit();
+      return false;
+  };
+  
   $('#record_button').click(function() {
   	if (recording) {
   	  recording = false;
@@ -105,18 +119,23 @@ RECORDING
   $('#upload_button').click(function() {
     return upload();
   });
+  
+  $('#submit_button').click(function() {
+    return submit();
+  }
+  );
 
   file_input = document.querySelector('input[type="file"]');
 
-  file_input.addEventListener('change', function(e) {
-    var reader;
-    reader = new FileReader();
-    reader.onload = function(e) {
-      window.n_channels = 2;
-      return init_sound(this.result);
-    };
-    return reader.readAsArrayBuffer(this.files[0]);
-  }, false);
+  //file_input.addEventListener('change', function(e) {
+  //  var reader;
+  //  reader = new FileReader();
+  //  reader.onload = function(e) {
+  //    window.n_channels = 2;
+  //    return init_sound(this.result);
+  //  };
+  //  return reader.readAsArrayBuffer(this.files[0]);
+  //}, false);
 
   $('#play_reversed').click(function() {
     stop_sound;
