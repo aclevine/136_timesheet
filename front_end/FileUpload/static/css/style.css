@@ -10,7 +10,7 @@ html {
 
 body {
   padding-top: 60px;
-  line-height: 50px;
+  /*line-height: 50px;*/
   font-size: 1.2em;
 }
 
@@ -74,5 +74,22 @@ footer .company {
 footer .footer-nav {
   float: right;
   margin-right: 25px;
-  list
+}
+
+table {
+    /* font-family: verdana,arial,sans-serif; */
+    margin: 0 auto 0 auto;
+    font-size: 11px;
+    color: #333333;
+    border-width: 1px;
+    border-color: #a9c6c9;
+    border-collapse: collapse;
+}
+td {
+    border-width: 1px;
+    width: auto;
+    height: auto;
+    padding: 3px;
+    border-style: solid;
+    border-color: #a9c6c9;
 }
