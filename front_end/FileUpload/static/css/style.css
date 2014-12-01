@@ -94,21 +94,29 @@ td {
     border-width: 1px;
     text-align: right;
     width: 75px;
-    height: auto;
     padding: 3px;
     border-style: solid;
     border-color: #cccccc;
 }
 
-td#currentHourLabel {
+td.currentHourLabel {
     font-weight: bold;
     border: 2px solid Red;
     border-right: 1px solid Red;
     background-color: Red;
 }
 
-td#currentHourCell {
+td.currentHourCell {
     border: 2px solid Red;
+}
+
+td.header {
+    background-color: none;
+    border: none;
+}
+
+td.columnLabel {
+    text-align: center;
 }
 
 td.worked {
