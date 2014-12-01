@@ -175,62 +175,44 @@ var calendar = document.getElementById('calendar'),
 // Set the table ID so it is accessible via document.getElementById
 table.id = 'table';
 
+// Make HTML table element and add it to the page
 (function tableCreate() {
     var time = getDayStart(new DateTime());
-    // 2014-11-29T8:0:0Z/2014-11-29T17:0:0Z
-    
-    // Get Begin and End Time
-    //var startTime = '10:05:00';
-    //var endTime = '12:05:00';
-      
-    //start = startTime.split(":");
-    //end   = startTime.split(":");
-    //  
-    //// Get Hour            
-    //start    = parseInt(start[0]);
-    //end      = parseInt(end[0]);
-    
-    //if(start > end) {
-    //    var temp  = start;
-    //        start = end;
-    //        end   = temp;
-    //}
     // Draw Table
-    
     for(var i = 0; i < 25; i++){
         var tr = table.insertRow();
         for(var j = 0; j < 2; j++){
             var td = tr.insertCell();
-            // Header Cell Style
+            // Header cell style
             if (i == 0 || j == 0) {
                 td.style.backgroundColor = 'None';
                 td.style.border = 'None';
                 td.className = 'noclick'
             }
-            // Extra Top Left Cell Style
+            // Extra top left cell style
             if (i == 0 && j == 0) {
                 td.style.border = 'None';
                 td.style.backgroundColor = 'None';
             }
-            // Add Date in Column Header
+            // Add date in column header
             if ( i == 0 && j == 1) {
                 td.style.textAlign = 'Center';
                 var dateString = today.value.toLocaleDateString();
                 date = document.createTextNode(dateString);
                 td.appendChild(date);
             }
-            // Add Hour Labels
+            // Add hour labels
             if (i > 0 && j == 0) {
                 td.appendChild(
                     document.createTextNode(getHumanTimeString(time))
                 );
             }
-            // Add Hour IDs
+            // Add hour Ids
             if (i > 0 && j > 0) {
                 td.id = 'Hour-' + (i-1);
                 td.className = 'notworked';
             }
-            // Indicate Current Hour
+            // Indicate current hour
             if (i == now.hour()+1) {
                 if (j == 0) {
                     td.style.fontWeight = 'Bold';
@@ -241,11 +223,8 @@ table.id = 'table';
                     td.style.border = '2px Solid Red';
                 }
             }
-            // Filling
-            //if(i > start && i-1 <= end && j == 1 ) {
-            //    td.style.backgroundColor = '#33cc66';
-            //}
         }
+        // Increment to the Next Hour
         time.next(hour);
     }
     
@@ -259,6 +238,8 @@ table.id = 'table';
     
     // Append the table to the calendar div
     calendar.appendChild(table);
+    
+    // Provide easy access to the table rows (trs) and table cells (hours)
     trs = table.firstElementChild.children;
     hours = [];
     for (var i = 1; i < trs.length; i++) {
@@ -266,16 +247,19 @@ table.id = 'table';
     }
 })();
 
+// Set today's date to the next day
 nextDay = function() {
     today.next(day);
     date.nodeValue = today.value.toLocaleDateString();
 }
 
+// Set today's date to the previous day
 previousDay = function() {
     today.previous(day);
     date.nodeValue = today.value.toLocaleDateString();
 }
 
+// Set the class of all hours in a given range
 setRange = function(start, end, cl) {
     if (start > end) {
         var temp  = start;
@@ -287,6 +271,7 @@ setRange = function(start, end, cl) {
     }
 }
 
+// Set hours in the interval (specified in the HTML form hidden value) as worked
 fillHours = function() {
     var interval = document.querySelector('input[type="hidden"]').value,
         start = parseInt(interval.split('/')[0].split('T')[1].split(':')[0]),
@@ -294,18 +279,22 @@ fillHours = function() {
     setRange(start, end, 'worked');
 }
 
+// Set all hours as not worked
 unfillHours = function() {
     setRange(0, 25, 'notworked');
 }
 
+// Return whether the given hour was worked or not
 worked = function(hour) {
     return (hour.className == 'worked');
 }
 
+// Return an array of the table cell elements that are classified as worked
 getWorkedHours = function() {
     return hours.filter(worked);
 }
 
+// Return whether the given hour is the start of an interval of worked hours
 isStartOfInterval = function(hour) {
     var i = parseInt(hour.id.split('-')[1]);
     if (0 < i < hours.length) {
@@ -313,6 +302,7 @@ isStartOfInterval = function(hour) {
     }
 }
 
+// Return whether the given hour is the end of an interval of worked hours
 isEndOfInterval = function(hour) {
     var i = parseInt(hour.id.split('-')[1]);
     if (0 < i < hours.length) {
@@ -320,6 +310,8 @@ isEndOfInterval = function(hour) {
     }
 }
 
+// Return an array of ISO interval strings corresponding to the intervals
+// that are currently set as worked
 getIntervals = function() {
     var starts = hours.filter(isStartOfInterval),
         ends = hours.filter(isEndOfInterval)
