@@ -363,7 +363,7 @@ getIntervals = function() {
             d2 = new Date(today.value.toDateString()),
             interval = [];
         d1.setHours(hours.indexOf(starts[i]));
-        d2.setHours(hours.indexOf(ends[i]));
+        d2.setHours(hours.indexOf(ends[i])+1);
         interval.push(d1.toISOString());
         interval.push(d2.toISOString());
         console.log('Interval ' + i + ' : ' + interval.join('/'));
