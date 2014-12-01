@@ -29,18 +29,15 @@ function getHumanTimeString(dateTime) {
     return [hm, apm].join(' ');
 }
 
-function toggleColor(element, on, off){
-    if ( element.style ) {
-        var color = element.style.backgroundColor;
-        element.style.backgroundColor = (color == off) ? on : off;
-    }
-}
-
 function toggleClass(element, on, off) {
     if ( element.className ) {
         var current = element.className;
         element.className = (current == off) ? on : off;
     }
+}
+
+function isToggleable(element) {
+    return ! element.classList.contains('noclick');
 }
 // Constants for time arithmetic
 var millisecond = 1,
@@ -87,6 +84,33 @@ function DateTime() {
     this.date = function() {                 // YYYY-MM-DD
         return [this.year(), this.month() + 1, this.day()].join('-');
     };
+    this.weekdayName = function() {
+        switch (this.value.getDay()) {
+        case 0:
+            return "Sunday";
+            break;
+        case 1:
+            return "Monday"; 
+            break;
+        case 2:
+            return "Tuesday";
+            break;
+        case 3:
+            return "Wednesday";
+            break;
+        case 4:
+            return "Thursday";
+            break;
+        case 5:
+            return "Friday";
+            break;
+        case 6:
+            return "Saturday";
+            break;
+        default:
+            return;
+        }
+    }
     this.time = function() {                 // HH:MM:SS
         return [this.hour(), this.minute(), this.second()].join(':');
     }
@@ -157,6 +181,14 @@ function Week(dateTime) {
     };
 }
 
+// Get a header label for the day and date
+// E.g., "Sunday, November 30, 2014"
+function dayHeaderLabel(dateTime) {
+    var day = dateTime.weekdayName(),
+        dateString = dateTime.value.toLocaleDateString();
+    return [day, dateString].join(', ');
+}
+
 // Global variables
 var calendar = document.getElementById('calendar'),
     table = document.createElement('table'),
@@ -187,7 +219,7 @@ table.id = 'table';
             if (i == 0 || j == 0) {
                 td.style.backgroundColor = 'None';
                 td.style.border = 'None';
-                td.className = 'noclick'
+                td.classList.add('noclick');
             }
             // Extra top left cell style
             if (i == 0 && j == 0) {
@@ -197,8 +229,8 @@ table.id = 'table';
             // Add date in column header
             if ( i == 0 && j == 1) {
                 td.style.textAlign = 'Center';
-                var dateString = today.value.toLocaleDateString();
-                date = document.createTextNode(dateString);
+                //var dateString = today.value.toLocaleDateString();
+                date = document.createTextNode(dayHeaderLabel(today));
                 td.appendChild(date);
             }
             // Add hour labels
@@ -231,7 +263,7 @@ table.id = 'table';
     // Setup onClick Events to Toggle Cell Color
     if(table) table.onclick = function(e) {
         var target = (e || window.event).target;
-        if (target.tagName in {TD:1} && target.className != 'noclick' ) {
+        if (target.tagName in {TD:1} && isToggleable(target)) {
             toggleClass(target, 'worked', 'notworked');
         }
     };
@@ -250,13 +282,13 @@ table.id = 'table';
 // Set today's date to the next day
 nextDay = function() {
     today.next(day);
-    date.nodeValue = today.value.toLocaleDateString();
+    date.nodeValue = dayHeaderLabel(today);
 }
 
 // Set today's date to the previous day
 previousDay = function() {
     today.previous(day);
-    date.nodeValue = today.value.toLocaleDateString();
+    date.nodeValue = dayHeaderLabel(today);
 }
 
 // Set the class of all hours in a given range
@@ -296,7 +328,7 @@ getWorkedHours = function() {
 
 // Return whether the given hour is the start of an interval of worked hours
 isStartOfInterval = function(hour) {
-    var i = parseInt(hour.id.split('-')[1]);
+    var i = hours.indexOf(hour);
     if (0 < i < hours.length) {
         return (i > 0) ? (worked(hours[i]) && (! worked(hours[i-1]))) : worked(hours[i]);
     }
@@ -304,7 +336,7 @@ isStartOfInterval = function(hour) {
 
 // Return whether the given hour is the end of an interval of worked hours
 isEndOfInterval = function(hour) {
-    var i = parseInt(hour.id.split('-')[1]);
+    var i = hours.indexOf(hour);
     if (0 < i < hours.length) {
         return (i+1 < hours.length) ? (worked(hours[i]) && (! worked(hours[i+1]))) : worked(hours[i]);
     }
@@ -320,8 +352,8 @@ getIntervals = function() {
         var d1 = new Date(today.value.toDateString()),
             d2 = new Date(today.value.toDateString()),
             interval = [];
-        d1.setHours(parseInt(starts[i].id.split('-')[1]));
-        d2.setHours(parseInt(ends[i].id.split('-')[1]) + 1);
+        d1.setHours(hours.indexOf(starts[i]));
+        d2.setHours(hours.indexOf(ends[i]));
         interval.push(d1.toISOString());
         interval.push(d2.toISOString());
         console.log('Interval ' + i + ' : ' + interval.join('/'));
