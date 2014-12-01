@@ -42,6 +42,7 @@ function toggleClass(element, on, off) {
 function isToggleable(element) {
     return ! element.classList.contains('noclick');
 }
+
 // Constants for time arithmetic
 var millisecond = 1,
     second = 1000 * millisecond,
@@ -295,11 +296,11 @@ previousDay = function() {
 
 // Set the class of all hours in a given range
 setRange = function(start, end, on, off) {
-    if (start > end) {
-        var temp  = start;
-            start = end;
-            end   = temp;
-    }
+    //if (start > end) {
+    //    var temp  = start;
+    //        start = end;
+    //        end   = temp;
+    //}
     hours.slice(start, end).map(function(hour) {
         hour.classList.add(on);
         hour.classList.remove(off);
@@ -332,7 +333,7 @@ getWorkedHours = function() {
 // Return whether the given hour is the start of an interval of worked hours
 isStartOfInterval = function(hour) {
     var i = hours.indexOf(hour);
-    if (0 < i < hours.length) {
+    if (0 <= i && i < hours.length) {
         return (i > 0) ? (worked(hours[i]) && (! worked(hours[i-1]))) : worked(hours[i]);
     }
 }
@@ -340,7 +341,7 @@ isStartOfInterval = function(hour) {
 // Return whether the given hour is the end of an interval of worked hours
 isEndOfInterval = function(hour) {
     var i = hours.indexOf(hour);
-    if (0 < i < hours.length) {
+    if (0 <= i && i+1 < hours.length) {
         return (i+1 < hours.length) ? (worked(hours[i]) && (! worked(hours[i+1]))) : worked(hours[i]);
     }
 }
