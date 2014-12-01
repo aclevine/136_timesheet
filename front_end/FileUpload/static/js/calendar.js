@@ -192,10 +192,21 @@ function dayHeaderLabel(dateTime) {
     return [day, dateString].join(', ');
 }
 
-// Global variables
-var calendar = document.getElementById('calendar'),
-    table = document.createElement('table'),
-    now = new DateTime(),
+// Indicate the current hour row in the table if today is the current day
+function setCurrentHourIndicator() {
+    var currentHour = hours[now.hour()],
+        currentHourLabel = trs[now.hour()+1].children[0];
+    if (today.date() == new DateTime().date()) {
+        currentHour.classList.add('currentHourCell');
+        currentHourLabel.classList.add('currentHourLabel');
+    } else {
+        currentHour.classList.remove('currentHourCell');
+        currentHourLabel.classList.remove('currentHourLabel');
+    }
+}
+
+// Some convenient DateTime and other variables
+var now = new DateTime(),
     today = getDayStart(now),
     tomorrow = getDayStart(new DateTime().next(day)),
     yesterday = getDayStart(new DateTime().previous(day)),
@@ -203,11 +214,11 @@ var calendar = document.getElementById('calendar'),
     lastHour = new DateTime().previous(hour),
     thisWeek = new Week(),
     nextWeek = new Week(new DateTime().next(week)),
-    lastWeek = new Week(new DateTime().previous(week)),
-    on = '#cccccc',
-    off = '';
+    lastWeek = new Week(new DateTime().previous(week));
 
-// Set the table ID so it is accessible via document.getElementById
+// Set up global DOM variables for easier accessibility
+var calendar = document.getElementById('calendar'),
+    table = document.createElement('table');
 table.id = 'table';
 
 // Make HTML table element and add it to the page
@@ -241,14 +252,6 @@ table.id = 'table';
                 td.id = 'Hour-' + (i-1);
                 td.classList.add('notworked');
             }
-            // Indicate current hour
-            if (i == now.hour()+1) {
-                if (j == 0) {
-                    td.classList.add('currentHourLabel');
-                } else {
-                    td.classList.add('currentHourCell');
-                }
-            }
         }
         // Increment to the Next Hour
         time.next(hour);
@@ -271,33 +274,23 @@ table.id = 'table';
     for (var i = 1; i < trs.length; i++) {
         hours.push(trs[i].children[1]);
     }
+    
+    // Indicate current hour
+    setCurrentHourIndicator();
 })();
-
-// Indicate the current hour row in the table if today is the current day
-function setCurrentIndicator() {
-    var currentHour = hours[now.hour()],
-        currentHourLabel = trs[now.hour()+1].children[0];
-    if (today.date() == new DateTime().date()) {
-        currentHour.classList.add('currentHourCell');
-        currentHourLabel.classList.add('currentHourLabel');
-    } else {
-        currentHour.classList.remove('currentHourCell');
-        currentHourLabel.classList.remove('currentHourLabel');
-    }
-}
 
 // Set today's date to the next day
 nextDay = function() {
     today.next(day);
     date.nodeValue = dayHeaderLabel(today);
-    setCurrentIndicator();
+    setCurrentHourIndicator();
 }
 
 // Set today's date to the previous day
 previousDay = function() {
     today.previous(day);
     date.nodeValue = dayHeaderLabel(today);
-    setCurrentIndicator();
+    setCurrentHourIndicator();
 }
 
 // Set the class of all hours in a given range
