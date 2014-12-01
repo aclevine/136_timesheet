@@ -281,7 +281,7 @@ fillHours = function() {
 
 // Set all hours as not worked
 unfillHours = function() {
-    setRange(0, 25, 'notworked');
+    setRange(0, 24, 'notworked');
 }
 
 // Return whether the given hour was worked or not
@@ -324,6 +324,7 @@ getIntervals = function() {
         d2.setHours(parseInt(ends[i].id.split('-')[1]) + 1);
         interval.push(d1.toISOString());
         interval.push(d2.toISOString());
+        console.log('Interval ' + i + ' : ' + interval.join('/'));
         intervals.push(interval.join('/'));
     }
     return intervals;
