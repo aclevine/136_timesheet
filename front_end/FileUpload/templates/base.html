@@ -20,6 +20,24 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   {% block css %}{% endblock %}
   <script src="{{ url_for('static', filename='libs/jquery/jquery-1.9.0.min.js') }}"></script>
+  <script type="text/javascript">
+  function keypress(myfield, e) {
+      var keycode;
+      if (window.event) {
+          keycode = window.event.keyCode;
+      } else if (e) {
+          keycode = e.which;
+      } else {
+          return true;
+      };
+      if (keycode == 13) {        // enter
+          myfield.submit();
+          return false;
+      } else {
+          return true
+      };
+  }
+  </script>
 </head>
 <body class="{% block body_class %}{% endblock %}">
 </div><!-- /.container -->
