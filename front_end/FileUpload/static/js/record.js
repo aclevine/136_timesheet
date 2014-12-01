@@ -82,11 +82,11 @@ RECORDING
             interval = document.getElementById('interval');
         response_json = $.parseJSON(response);
         window.n_channels = 1;
-        console.log(response_json.transcription);
-        console.log(response_json.interval);
+        console.log('Recognized : ' + response_json.transcription);
+        console.log('Parsed interval : ' + response_json.interval);
         user_text.value = response_json.transcription;
         interval.value = response_json.interval;
-        return false;
+        return getIntervals;
         //return load_sound_file(response_json.filepath);
       }
     });
