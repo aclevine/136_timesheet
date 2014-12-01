@@ -310,8 +310,8 @@ setRange = function(start, end, on, off) {
 // Set hours in the interval (specified in the HTML form hidden value) as worked
 fillHours = function() {
     var interval = document.querySelector('input[type="hidden"]').value,
-        start = parseInt(interval.split('/')[0].split('T')[1].split(':')[0]),
-        end = parseInt(interval.split('/')[1].split('T')[1].split(':')[0]);
+        start = parseInt(interval.split('/')[0].split('T')[1].split(':')[0])-1,
+        end = parseInt(interval.split('/')[1].split('T')[1].split(':')[0])-1;
     setRange(start, end, 'worked', 'notworked');
 }
 
