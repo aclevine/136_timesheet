@@ -60,6 +60,7 @@ RECORDING
   };
 
   stop = function() {
+    document.getElementById("time").innerHTML = '';
     document.getElementById('record_button').value = 'Record';
     //document.getElementById("stop_button").disabled = true;
     Recorder.stop();
@@ -76,27 +77,27 @@ RECORDING
       url: "/",
       audioParam: "audio_file",
       success: function(response) {
-        var response_json;
+        var response_json,
+            user_text = document.getElementById('user_text'),
+            interval = document.getElementById('interval');
         response_json = $.parseJSON(response);
         window.n_channels = 1;
         console.log(response_json.transcription);
         console.log(response_json.interval);
-        document.getElementById('user_text').value = response_json.transcription;
-        document.getElementById('interval').value = response_json.interval;
-        return true;
+        user_text.value = response_json.transcription;
+        interval.value = response_json.interval;
+        return false;
         //return load_sound_file(response_json.filepath);
       }
     });
-    return false;
   };
-
-  submit = function() {
-      var form;
-      form = document.getElementById("user_input");
-      console.log(form);
-      form.submit();
-      return false;
-  };
+  
+  //submit = function() {
+  //    var form;
+  //    form = document.getElementById("user_input");
+  //    console.log(form);
+  //    return form.submit();
+  //};
   
   $('#record_button').click(function() {
   	if (recording) {
@@ -120,13 +121,13 @@ RECORDING
     return upload();
   });
   
-  $('#submit_button').click(function() {
-    return submit();
-  }
-  );
+  //$('#submit_button').click(function() {
+  //  return submit();
+  //}
+  //);
 
   file_input = document.querySelector('input[type="file"]');
-
+  
   //file_input.addEventListener('change', function(e) {
   //  var reader;
   //  reader = new FileReader();
@@ -136,7 +137,7 @@ RECORDING
   //  };
   //  return reader.readAsArrayBuffer(this.files[0]);
   //}, false);
-
+  
   $('#play_reversed').click(function() {
     stop_sound;
     return play_reversed();
