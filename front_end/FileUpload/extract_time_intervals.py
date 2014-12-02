@@ -101,7 +101,7 @@ class GetTimeWorked():
         if end_hour:
             end_hour = int(end_hour[0])
             # set am / pm for end time based on current time
-            if self.curr_interval.now.hour > 12:
+            if start_hour > end_hour:
                 end_hour = end_hour + 12
             if end_minute:
                 end_minute = int(end_minute[0])
